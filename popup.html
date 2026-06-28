@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InTruth Islamic</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body class="theme-dark">
+  <header>
+    <div class="logo-area">
+      <span class="logo-text">InTruth <span class="accent">Islamic</span></span>
+    </div>
+    
+    <div class="header-controls">
+      <!-- Переключатель языка отображения интерфейса и отчетов -->
+      <div class="lang-selector" id="langSelector">
+        <button class="lang-btn active" data-lang="ru">RU</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="ar">AR</button>
+      </div>
+      
+      <!-- Ссылка на настройки -->
+      <button id="settingsBtn" class="icon-btn" title="Настройки">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.1a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Блок ошибок/предупреждений (например, нет API-ключа) -->
+  <div id="alertBanner" class="alert-banner" style="display: none;">
+    <span id="alertMsg"></span>
+    <button id="alertActionBtn" class="alert-action-btn">Настроить</button>
+  </div>
+
+  <main>
+    <!-- Вкладки сверху -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="tab-video" id="tabVideoBtn">YouTube Видео</button>
+      <button class="tab-btn" data-tab="tab-text" id="tabTextBtn">Анализ текста</button>
+    </div>
+
+    <!-- Контент вкладки Видео -->
+    <div id="tab-video" class="tab-content active">
+      <div id="noVideoView" class="view-state" style="display: none;">
+        <div class="state-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-video-off"><path d="M10.66 6H14a2 2 0 0 1 2 2v2.5l5.24-3.49A1 1 0 0 1 22 7.84v8.32a1 1 0 0 1-1.54.83l-1.9-1.26"/><path d="M16 16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h2"/><line x1="2" x2="22" y1="2" y2="22"/></svg>
+        </div>
+        <p class="state-title" data-i18n="open_youtube_title">Откройте видео на YouTube</p>
+        <p class="state-desc" data-i18n="open_youtube_desc">Чтобы начать проверку, перейдите на страницу просмотра видео YouTube и откройте расширение.</p>
+      </div>
+
+      <div id="videoReadyView" class="view-state">
+        <div class="video-info-card">
+          <p class="video-channel" id="videoChannel">Загрузка...</p>
+          <h2 class="video-title" id="videoTitle">Загрузка...</h2>
+        </div>
+        
+        <button id="startAnalysisBtn" class="btn btn-primary btn-large">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;"><path d="m12 3-1.912 5.886L5 10.8l5.088 1.914L12 18.6l1.912-5.886L19 10.8l-5.088-1.914Z"/><path d="m5 3 1 2.5L8.5 6 6 7 5 9.5 4 7 1.5 6 4 5Z"/><path d="m19 17 1 2.5 2.5.5-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1Z"/></svg>
+          <span data-i18n="btn_analyze">Анализировать видео</span>
+        </button>
+      </div>
+
+      <div id="loadingView" class="view-state" style="display: none;">
+        <div class="loader-animation">
+          <div class="spinner"></div>
+          <div class="pulse-ring"></div>
+        </div>
+        <p class="state-title" id="loadingText" data-i18n="loading_transcript">Считываем аудиодорожку...</p>
+        <p class="state-desc" data-i18n="loading_sub">Это может занять до минуты в зависимости от длины видео.</p>
+      </div>
+
+      <div id="resultsView" class="view-state" style="display: none;">
+        <!-- Карточка вердикта -->
+        <div class="verdict-card" id="verdictCard">
+          <div class="verdict-header">
+            <span class="verdict-label" data-i18n="verdict_label">Вердикт ИИ:</span>
+            <span class="badge" id="verdictBadge">Загрузка...</span>
+          </div>
+          <p class="verdict-text" id="verdictText"></p>
+        </div>
+
+        <!-- Карточка личности проповедника -->
+        <div class="speaker-card" id="speakerCard" style="display: none;">
+          <div class="speaker-header">
+            <span class="speaker-label" data-i18n="speaker_label">Анализ личности:</span>
+            <span class="speaker-name" id="speakerName">...</span>
+          </div>
+          <div class="speaker-classification-row">
+            <span class="badge" id="speakerBadge">...</span>
+          </div>
+          <p class="speaker-text" id="speakerText"></p>
+        </div>
+
+        <!-- Секция цитат -->
+        <div class="citations-section">
+          <h3 class="section-title">
+            <span data-i18n="citations_title">Проверенные цитаты</span>
+            <span class="citation-count" id="citationCount">0</span>
+          </h3>
+
+          <div id="citationsList" class="citations-list">
+            <!-- Сюда вставляются карточки цитат -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Контент вкладки Текст -->
+    <div id="tab-text" class="tab-content">
+      <div class="text-input-view">
+        <textarea id="manualTextInput" placeholder="Вставьте сюда текст речи проповедника или хадис, который вы хотите проверить... (минимум 10 символов)" rows="6"></textarea>
+        
+        <button id="startTextAnalysisBtn" class="btn btn-primary">
+          <span data-i18n="btn_check_text">Проверить текст</span>
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <script src="popup.js"></script>
+</body>
+</html>

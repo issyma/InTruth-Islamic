@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Настройки - InTruth Islamic</title>
+  <style>
+    :root {
+      --bg-color: #0b0f19;
+      --card-bg: rgba(17, 24, 39, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --primary: #10b981;
+      --primary-hover: #059669;
+      --focus-ring: rgba(16, 185, 129, 0.4);
+      --danger: #ef4444;
+      --danger-hover: #dc2626;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(59, 130, 246, 0.06) 0%, transparent 40%);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 30px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #fff;
+    }
+
+    h1 span {
+      color: var(--primary);
+    }
+
+    .description {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 25px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: var(--text-main);
+    }
+
+    input[type="text"], select {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(31, 41, 55, 0.5);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    input[type="text"]:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--focus-ring);
+    }
+
+    .help-text {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+
+    .help-text a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .help-text a:hover {
+      text-decoration: underline;
+    }
+
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 25px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-danger {
+      background: transparent;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: var(--danger);
+    }
+
+    .btn-danger:hover {
+      background: rgba(239, 68, 68, 0.1);
+      border-color: var(--danger);
+    }
+
+    .alert {
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-bottom: 20px;
+      display: none;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .alert-success {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid var(--primary);
+      color: #a7f3d0;
+    }
+
+    .provider-section {
+      border-top: 1px solid var(--card-border);
+      padding-top: 20px;
+      margin-top: 20px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>InTruth <span>Islamic</span></h1>
+    <p class="description">
+      Настройте параметры интеграции с искусственным интеллектом для распознавания исламского видео- и текстового контента.
+    </p>
+
+    <div id="statusAlert" class="alert alert-success">Настройки успешно сохранены!</div>
+
+    <!-- Выбор провайдера ИИ -->
+    <div class="form-group">
+      <label for="providerSelect">Провайдер ИИ</label>
+      <select id="providerSelect">
+        <option value="gemini">Google Gemini API (По умолчанию)</option>
+        <option value="custom">Локальный ИИ / Сторонний API (Ollama, DeepSeek и др.)</option>
+      </select>
+    </div>
+
+    <!-- Настройки Google Gemini -->
+    <div id="geminiSettings" class="provider-section">
+      <div class="form-group">
+        <label for="apiKey">Gemini API Key</label>
+        <input type="text" id="apiKey" placeholder="AIzaSy...">
+        <div class="help-text">
+          Получите бесплатный ключ API в 
+          <a href="https://aistudio.google.com/" target="_blank">Google AI Studio</a>.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="modelSelect">Модель Gemini</label>
+        <select id="modelSelect">
+          <option value="gemini-2.5-flash">Gemini 2.5 Flash (Быстро и экономно)</option>
+          <option value="gemini-2.5-pro">Gemini 2.5 Pro (Глубокий анализ)</option>
+          <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Настройки Custom API (Ollama / DeepSeek) -->
+    <div id="customSettings" class="provider-section" style="display: none;">
+      <div class="form-group">
+        <label for="customUrl">URL адрес API (Base URL)</label>
+        <input type="text" id="customUrl" placeholder="http://localhost:11434/v1">
+        <div class="help-text">
+          Для локального **Ollama** укажите `http://localhost:11434/v1`. <br>
+          Для **DeepSeek API** укажите `https://api.deepseek.com/v1`.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="customKey">API Ключ (Token)</label>
+        <input type="text" id="customKey" placeholder="Оставьте пустым для локального Ollama">
+        <div class="help-text">
+          Для DeepSeek вставьте ваш ключ `sk-...`. Для Ollama ключ не требуется.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="customModel">Название модели</label>
+        <input type="text" id="customModel" placeholder="llama3">
+        <div class="help-text">
+          Например: `llama3`, `qwen2.5:7b`, `deepseek-chat`. Убедитесь, что модель скачана в Ollama.
+        </div>
+      </div>
+    </div>
+
+    <div class="button-group">
+      <button id="saveBtn" class="btn-primary">Сохранить настройки</button>
+      <button id="clearCacheBtn" class="btn-danger">Очистить кэш проверок</button>
+    </div>
+  </div>
+  <script src="options.js"></script>
+</body>
+</html>
